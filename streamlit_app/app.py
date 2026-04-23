@@ -3,19 +3,14 @@ import pandas as pd
 import pickle
 from pathlib import Path
 
-# =====================================================================
 # PAGE CONFIGURATION
-# =====================================================================
-
 st.set_page_config(
     page_title="Placement Predictor",
     page_icon="🎓",
     layout="wide",
 )
 
-# =====================================================================
 # INTEGRATED THEME CONFIGURATION (CSS)
-# =====================================================================
 st.markdown("""
     <style>
     /* Primary theme colors */
@@ -80,8 +75,7 @@ st.markdown("""
 st.title("🎓 Student Placement Predictor")
 st.write("Simple ML-based prediction system for student placement and salary")
 
-# ==================== MODEL LOADING ====================
-
+#MODEL LOADING
 @st.cache_resource
 def load_models():
     """Load trained models"""
@@ -96,13 +90,11 @@ def load_models():
         
         return clf_model, reg_model
     except Exception as e:
-        st.error(f"❌ Error loading models: {e}")
+        st.error(f"Error loading models: {e}")
         return None, None
 
-# ==================== DATA PREPARATION ====================
-
+#DATA PREPARATION
 def prepare_features(data):
-    """Prepare and encode student data"""
     try:
         df = pd.DataFrame([data])
         
@@ -122,12 +114,41 @@ def prepare_features(data):
             if col in df_encoded.columns:
                 df_encoded[col] = df_encoded[col].map(mapping)
         
-        return df_encoded
+        # Define feature order EXACTLY as in training data A.csv
+        feature_order = [
+            'gender',
+            'branch',
+            'cgpa',
+            'tenth_percentage',
+            'twelfth_percentage',
+            'backlogs',
+            'study_hours_per_day',
+            'attendance_percentage',
+            'projects_completed',
+            'internships_completed',
+            'coding_skill_rating',
+            'communication_skill_rating',
+            'aptitude_skill_rating',
+            'hackathons_participated',
+            'certifications_count',
+            'sleep_hours',
+            'stress_level',
+            'part_time_job',
+            'family_income_level',
+            'city_tier',
+            'internet_access',
+            'extracurricular_involvement'
+        ]
+        
+        # Reorder columns to match exact training order
+        df_final = df_encoded[feature_order]
+        
+        return df_final
     except Exception as e:
         st.error(f"Error preparing data: {e}")
         return None
 
-# ==================== PREDICTIONS ====================
+#PREDICTIONS
 
 def predict(clf_model, reg_model, student_data):
     """Make placement and salary predictions"""
@@ -170,7 +191,7 @@ def predict(clf_model, reg_model, student_data):
         st.error(f"Prediction error: {e}")
         return None, None
 
-# ==================== MAIN APP ====================
+#MAIN APP
 
 # Load models
 clf_model, reg_model = load_models()
@@ -178,7 +199,7 @@ clf_model, reg_model = load_models()
 if clf_model is None or reg_model is None:
     st.stop()
 
-# ==================== PREDICTION SECTION ====================
+#PREDICTION SECTION
 
 st.subheader("Student Profile")
 
@@ -261,18 +282,18 @@ if st.button("🔮 Predict", use_container_width=True):
         col1, col2 = st.columns(2)
         
         with col1:
-            st.subheader("📊 Placement Status")
+            st.subheader("Placement Status")
             if placement['status'] == 'Placed':
-                st.success(f"✅ {placement['status']}")
+                st.success(f"{placement['status']}")
             else:
-                st.warning(f"⚠️ {placement['status']}")
+                st.warning(f"{placement['status']}")
             
             st.metric("Confidence", f"{placement['confidence']:.1f}%")
             st.metric("Probability Placed", f"{placement['probability']:.1f}%")
         
         with col2:
-            st.subheader("💰 Salary Prediction")
-            st.success(f"₹ {salary['amount']:.2f} LPA")
+            st.subheader("Salary Prediction")
+            st.success(f"Rp {salary['amount']:.2f} LPA")
             st.metric("Range", salary['range'])
 
 
