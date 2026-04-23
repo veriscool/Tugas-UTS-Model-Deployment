@@ -16,14 +16,14 @@ st.markdown("""
     /* Primary theme colors */
     :root {
         --primary-color: #1f77b4;
-        --background-color: #ffffff;
+        --background-color: #000000;
         --secondary-background-color: #f0f2f6;
         --text-color: #262730;
     }
     
     /* Main container background */
     body, .stApp {
-        background-color: #ffffff;
+        background-color: #000000;
         color: #262730;
     }
     
