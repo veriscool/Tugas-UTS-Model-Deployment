@@ -1,2 +1,2 @@
 # Tugas-UTS-Model-Deployment
-ini adalah untuk deployment aplikasi untuk ujian tengah semester materi model deployment
+link streamlit: https://tugas-uts-model-deployment-qlpsgzu9aubjjlyfebzl93.streamlit.app
